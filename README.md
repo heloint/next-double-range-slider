@@ -23,9 +23,7 @@ npm run build && npm run start
 To run the tests:
 
 ```bash
-npm run test
-# or
-npx jest
+npm run dev && npm run test
 ```
 
 Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
