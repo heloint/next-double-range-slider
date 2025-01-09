@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 export async function fetchRangeData(): Promise<RangeData | null> {
     try {
         const response = await fetch(
-            "http://localhost:3000/api/range-values/random",
+            "http://localhost:8080/api/range-values/random",
             {
                 method: "GET",
                 headers: {
