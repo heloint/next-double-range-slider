@@ -89,7 +89,7 @@ function ModalValueInput({
         setTempValue(targetValue);
     };
 
-    const handleValueSet = (e: React.SyntheticEvent) => {
+    const handleValueSet = () => {
         setValue(tempValue);
         if (!modalRef) return;
         modalRef.current?.close();

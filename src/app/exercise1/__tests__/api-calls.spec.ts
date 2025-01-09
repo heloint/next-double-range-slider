@@ -1,6 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { fetchRangeData, RangeData } from '../_lib/api-calls';
+import { fetchRangeData } from '../_lib/api-calls';
 
 const mockData = {
     maxLimit: 100,
@@ -11,7 +11,7 @@ const mockData = {
 
 // Mock the server using msw
 const server = setupServer(
-    http.get('http://localhost:3000/api/range-values/random', (info) => {
+    http.get('http://localhost:3000/api/range-values/random', () => {
         return HttpResponse.json(mockData, {status: 200});
     })
 );
@@ -32,7 +32,7 @@ describe('fetchRangeData', () => {
     it('should return null when fetch fails', async () => {
         // Mock a failed fetch response (e.g., 500 server error)
         server.use(
-            http.get('http://localhost:3000/api/range-values/random', (info) => {
+            http.get('http://localhost:3000/api/range-values/random', () => {
                 return HttpResponse.json({}, {status: 500});
             })
         );
@@ -46,7 +46,7 @@ describe('fetchRangeData', () => {
     it('should return null when there is a network error', async () => {
         // Mock a network error
         server.use(
-            http.get('http://localhost:3000/api/range-values/random', async (info) => {
+            http.get('http://localhost:3000/api/range-values/random', async () => {
                 await delay(100);
                 return HttpResponse.json(null, {status: 200});
             })
