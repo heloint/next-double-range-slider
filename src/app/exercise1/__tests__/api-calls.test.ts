@@ -1,8 +1,8 @@
-import { fetchRangeData, RangeData } from './path-to-your-file'; // Adjust the path
-import { rest } from 'msw';
+import { delay, http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { fetchRangeData, RangeData } from '../_lib/api-calls';
 
-const mockData: RangeData = {
+const mockData = {
     maxLimit: 100,
     minLimit: 0,
     defaultMaxValue: 90,
@@ -11,8 +11,8 @@ const mockData: RangeData = {
 
 // Mock the server using msw
 const server = setupServer(
-    rest.get('http://localhost:3000/api/range-values/random', (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(mockData));
+    http.get('http://localhost:3000/api/range-values/random', (info) => {
+        return HttpResponse.json(mockData, {status: 200});
     })
 );
 
@@ -32,8 +32,8 @@ describe('fetchRangeData', () => {
     it('should return null when fetch fails', async () => {
         // Mock a failed fetch response (e.g., 500 server error)
         server.use(
-            rest.get('http://localhost:3000/api/range-values/random', (req, res, ctx) => {
-                return res(ctx.status(500));
+            http.get('http://localhost:3000/api/range-values/random', (info) => {
+                return HttpResponse.json({}, {status: 500});
             })
         );
 
@@ -46,8 +46,9 @@ describe('fetchRangeData', () => {
     it('should return null when there is a network error', async () => {
         // Mock a network error
         server.use(
-            rest.get('http://localhost:3000/api/range-values/random', (req, res, ctx) => {
-                return res(ctx.status(0), ctx.delay(100)); // Network error scenario
+            http.get('http://localhost:3000/api/range-values/random', async (info) => {
+                await delay(100);
+                return HttpResponse.json(null, {status: 200});
             })
         );
 
