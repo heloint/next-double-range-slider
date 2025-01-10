@@ -9,13 +9,17 @@ import React, {
 import SliderThumb from "./SliderThumb";
 
 export default function ValueSetterButton({
+    maxLimit,
+    colorClass,
     sliderRef,
     value,
-    setValue,
+    setValueAction,
 }: {
+    maxLimit: number;
+    colorClass?: string;
     sliderRef: RefObject<HTMLDivElement | null>;
     value: number;
-    setValue: Dispatch<SetStateAction<number>>;
+    setValueAction: Dispatch<SetStateAction<string | number>>;
 }) {
     const thumbRef = useRef<HTMLSpanElement | null>(null);
     const [thumbParent, setThumbParent] = useState<HTMLElement | null>(null);
@@ -35,7 +39,7 @@ export default function ValueSetterButton({
 
         const rect = slider.getBoundingClientRect();
 
-        const outOfScopeMarginY = 12;
+        const outOfScopeMarginY = 5;
         const outOfScopeMarginX = 30;
         const scopeLimitTop = rect.top + outOfScopeMarginY;
         const scopeLimitBottom = rect.bottom - outOfScopeMarginY;
@@ -53,8 +57,8 @@ export default function ValueSetterButton({
         }
 
         const offsetX = e.clientX - rect.left;
-        const newValue = calculateNewScaleValue(offsetX, rect);
-        setValue(newValue);
+        const newValue = calculateNewScaleValue(maxLimit, offsetX, rect);
+        setValueAction(newValue.toFixed(2));
     };
 
     const handleTouchDrag = (ev: TouchEvent) => {
@@ -62,8 +66,8 @@ export default function ValueSetterButton({
         if (!slider) return;
         const rect = slider.getBoundingClientRect();
         const offsetX = ev.touches[0].clientX - rect.left;
-        const newValue = calculateNewScaleValue(offsetX, rect);
-        setValue(newValue);
+        const newValue = calculateNewScaleValue(maxLimit, offsetX, rect);
+        setValueAction(newValue.toFixed(2));
     };
 
     const removeAllHandlers = () => {
@@ -86,12 +90,32 @@ export default function ValueSetterButton({
 
     return (
         <span ref={thumbRef}>
-            <SliderThumb value={value} grabHandlerAction={addAllHandlers} />
+            <SliderThumb
+                maxLimit={maxLimit}
+                colorClass={colorClass}
+                value={value}
+                grabHandlerAction={addAllHandlers}
+            />
         </span>
     );
 }
-function calculateNewScaleValue(offsetX: number, rect: DOMRect) {
+function calculateNewScaleValue(
+    maxLimit: number,
+    offsetX: number,
+    rect: DOMRect
+) {
     const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
-    const newValue = percentage * 100;
+    const newValue = percentage * maxLimit;
     return newValue;
+
+    // // Ensure offsetX stays between 0 and rect.width
+    // const clampedOffsetX = Math.min(Math.max(offsetX, 0), rect.width);
+
+    // // Calculate percentage based on clamped offsetX and rect.width
+    // const percentage = clampedOffsetX / rect.width;
+
+    // // Scale percentage to maxLimit
+    // const newValue = percentage * maxLimit;
+
+    // return newValue;
 }

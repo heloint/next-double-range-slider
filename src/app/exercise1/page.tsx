@@ -1,4 +1,4 @@
-import DraggableRange from "./_components/draggable-range/DraggableRange";
+import DraggableRange from "../../components/draggable-range/DraggableRange";
 import { fetchRangeData } from "./_lib/api-calls";
 
 export default async function Page() {
@@ -6,7 +6,9 @@ export default async function Page() {
 
     return (
         <div className="flex flex-col w-full h-screen justify-center items-center">
-            <h1 className="text-2xl">Exercise 1 - Draggable range slider with double thumbs</h1>
+            <h1 className="text-2xl">
+                Exercise 1 - Normal range use case
+            </h1>
             {rangeData ? (
                 <DraggableRange data={rangeData} />
             ) : (

@@ -11,7 +11,7 @@ const mockData = {
 
 // Mock the server using msw
 const server = setupServer(
-    http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/random`, () => {
+    http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/normal`, () => {
         return HttpResponse.json(mockData, {status: 200});
     })
 );
@@ -32,7 +32,7 @@ describe('fetchRangeData', () => {
     it('should return null when fetch fails', async () => {
         // Mock a failed fetch response (e.g., 500 server error)
         server.use(
-            http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/random`, () => {
+            http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/normal`, () => {
                 return HttpResponse.json({}, {status: 500});
             })
         );
@@ -46,7 +46,7 @@ describe('fetchRangeData', () => {
     it('should return null when there is a network error', async () => {
         // Mock a network error
         server.use(
-            http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/random`, async () => {
+            http.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/normal`, async () => {
                 await delay(100);
                 return HttpResponse.json(null, {status: 200});
             })

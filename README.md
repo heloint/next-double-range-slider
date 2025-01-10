@@ -2,7 +2,7 @@ Custom range slider
 ===================
 
 This Next.js project contains a range slider component with double thumbs on the **"/exercise1"** route.
-The component by default is feeding from a mock route handler on the "/api/range-values/random" route to get random mock data.
+The component by default is feeding from a mock route handler on the "/api/range-values/normal" route to get normal use case mock data.
 
 ## Getting Started
 
