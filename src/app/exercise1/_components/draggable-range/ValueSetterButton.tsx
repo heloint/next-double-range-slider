@@ -91,8 +91,7 @@ export default function ValueSetterButton({
     );
 }
 function calculateNewScaleValue(offsetX: number, rect: DOMRect) {
-    // console.log({offsetX, rectWidth: rect.width})
-    const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1); // Keep within bounds
+    const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
     const newValue = percentage * 100;
     return newValue;
 }
