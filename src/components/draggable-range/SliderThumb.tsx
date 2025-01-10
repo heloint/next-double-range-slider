@@ -7,6 +7,7 @@ export default function SliderThumb({
     colorClass,
     value,
     grabHandlerAction,
+    keydownHandlerAction
 }: {
     maxLimit: number,
     colorClass?: string;
@@ -14,12 +15,15 @@ export default function SliderThumb({
     grabHandlerAction: (
         e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
     ) => void;
+    keydownHandlerAction: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }) {
     const [isGrabbed, setIsGrabbed] = useState<boolean>(false);
 
     return (
         <div
+            tabIndex={0}
             title="drag me"
+            onKeyDown={keydownHandlerAction}
             onMouseDown={(e) => {
                 grabHandlerAction(e);
                 setIsGrabbed(true);

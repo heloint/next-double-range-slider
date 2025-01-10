@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SliderTrack from "./SliderTrack";
 import ValueSetterButton from "./ValueSetterButton";
 import ValueDisplay from "./ValueDisplay";
+import { getNearestIndex } from "./utils";
 
 export type RangeData = {
     maxLimit: number;
@@ -138,16 +139,5 @@ export default function DraggableRange(props: DraggableRangeProps) {
                 setValueDisplayAction={setMaxValueDisplay}
             />
         </div>
-    );
-}
-
-function getNearestIndex(value: number, array: number[]): number {
-    return array.reduce(
-        (nearestIndex, currentValue, currentIndex) =>
-            Math.abs(currentValue - value) <
-            Math.abs(array[nearestIndex] - value)
-                ? currentIndex
-                : nearestIndex,
-        0
     );
 }

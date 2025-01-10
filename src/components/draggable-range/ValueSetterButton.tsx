@@ -7,6 +7,7 @@ import React, {
     useEffect,
 } from "react";
 import SliderThumb from "./SliderThumb";
+import { getNearestIndex } from "./utils";
 
 export default function ValueSetterButton({
     maxLimit,
@@ -98,6 +99,57 @@ export default function ValueSetterButton({
         thumbParent.addEventListener("touchend", removeAllHandlers);
     };
 
+    const keydownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        switch (e.key) {
+            case "ArrowUp":
+                setValueAction((prev) => {
+                    if (!rangeValues) {
+                        return Number(prev) + 1;
+                    } else {
+                        const idx =
+                            getNearestIndex(Number(prev), rangeValues) + 1;
+                        return rangeValues[idx];
+                    }
+                });
+                break;
+            case "ArrowDown":
+                setValueAction((prev) => {
+                    if (!rangeValues) {
+                        return Number(prev) - 1;
+                    } else {
+                        const idx =
+                            getNearestIndex(Number(prev), rangeValues) - 1;
+                        return rangeValues[idx];
+                    }
+                });
+                break;
+            case "ArrowLeft":
+                setValueAction((prev) => {
+                    if (!rangeValues) {
+                        return Number(prev) - 1;
+                    } else {
+                        const idx =
+                            getNearestIndex(Number(prev), rangeValues) - 1;
+                        return rangeValues[idx];
+                    }
+                });
+                break;
+            case "ArrowRight":
+                setValueAction((prev) => {
+                    if (!rangeValues) {
+                        return Number(prev) + 1;
+                    } else {
+                        const idx =
+                            getNearestIndex(Number(prev), rangeValues) + 1;
+                        return rangeValues[idx];
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <span ref={thumbRef}>
             <SliderThumb
@@ -105,6 +157,7 @@ export default function ValueSetterButton({
                 colorClass={colorClass}
                 value={value}
                 grabHandlerAction={addAllHandlers}
+                keydownHandlerAction={keydownHandler}
             />
         </span>
     );
