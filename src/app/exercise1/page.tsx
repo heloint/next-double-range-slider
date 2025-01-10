@@ -5,7 +5,7 @@ export default async function Page() {
     const rangeData = await fetchRangeData();
 
     return (
-        <div className="flex flex-col w-100 h-[30rem] justify-center items-center">
+        <div className="flex flex-col w-full h-screen justify-center items-center">
             <h1 className="text-2xl">Exercise 1 - Draggable range slider with double thumbs</h1>
             {rangeData ? (
                 <DraggableRange data={rangeData} />

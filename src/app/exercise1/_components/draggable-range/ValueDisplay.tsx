@@ -1,13 +1,16 @@
+import { Dispatch, SetStateAction } from "react";
+
 export default function ValueDisplay({
     value,
     valueLabel,
 }: {
     value: number;
     valueLabel?: string;
+    setValueAction: Dispatch<SetStateAction<number>>;
 }) {
     return (
         <div
-            className="absolute top-10 left-1/2 transform -translate-x-1/2 text-sm font-medium text-gray-700"
+            className="text-sm text-center font-medium text-gray-700 w-16"
             style={{ left: `${value}%` }}
         >
             {value.toFixed(2)} {valueLabel ?? "€"}

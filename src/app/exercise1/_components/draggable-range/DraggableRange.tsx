@@ -4,11 +4,12 @@ import React, { useState, useRef, useEffect } from "react";
 import SliderTrack from "./SliderTrack";
 import ValueSetterButton from "./ValueSetterButton";
 import { RangeData } from "../../_lib/api-calls";
+import ValueDisplay from "./ValueDisplay";
 
 export default function DraggableRange({ data }: { data: RangeData }) {
     const valueLabel = "€";
-    const [minValue, setMinValue] = useState(data.defaultMinValue);
-    const [maxValue, setMaxValue] = useState(data.defaultMaxValue);
+    const [minValue, setMinValue] = useState(data.minLimit);
+    const [maxValue, setMaxValue] = useState(data.maxLimit);
     const sliderRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -34,26 +35,32 @@ export default function DraggableRange({ data }: { data: RangeData }) {
     }, [maxValue, data.maxLimit]);
 
     return (
-        <div
-            ref={sliderRef}
-            className="relative w-full max-w-md h-5 bg-slate-200 rounded-full cursor-pointer my-10 py-5"
-        >
-            <SliderTrack />
-            <ValueSetterButton
-                sliderRef={sliderRef}
+        <div className="w-full flex justify-center items-center gap-5">
+            <ValueDisplay
                 value={minValue}
-                setValue={setMinValue}
-                valueLimit={data.minLimit}
+                setValueAction={setMinValue}
                 valueLabel={valueLabel}
-                limitType={"min"}
             />
-            <ValueSetterButton
-                sliderRef={sliderRef}
+            <div
+                ref={sliderRef}
+                className="relative w-full max-w-md h-5 bg-slate-200 rounded-full cursor-pointer my-10 py-5"
+            >
+                <SliderTrack />
+                <ValueSetterButton
+                    sliderRef={sliderRef}
+                    value={minValue}
+                    setValue={setMinValue}
+                />
+                <ValueSetterButton
+                    sliderRef={sliderRef}
+                    value={maxValue}
+                    setValue={setMaxValue}
+                />
+            </div>
+            <ValueDisplay
                 value={maxValue}
-                setValue={setMaxValue}
-                valueLimit={data.maxLimit}
+                setValueAction={setMaxValue}
                 valueLabel={valueLabel}
-                limitType={"max"}
             />
         </div>
     );
