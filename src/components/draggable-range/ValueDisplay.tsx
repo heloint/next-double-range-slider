@@ -25,16 +25,20 @@ export default function ValueDisplay({
     };
     return (
         <div className="flex justify-center items-center">
-            <input
-                readOnly={inmutable ?? false}
-                disabled={inmutable ?? false}
-                ref={inputRef}
-                className="text-sm text-center font-medium text-gray-700 w-8"
-                type={"text"}
-                maxLength={15}
-                value={valueDisplay}
-                onChange={handleInputChange}
-            />
+            {inmutable ? (
+                <span>{valueDisplay}</span>
+            ) : (
+                <input
+                    readOnly={inmutable ?? false}
+                    disabled={inmutable ?? false}
+                    ref={inputRef}
+                    className="text-sm text-center font-medium text-gray-700 w-8"
+                    type={"text"}
+                    maxLength={15}
+                    value={valueDisplay}
+                    onChange={handleInputChange}
+                />
+            )}
             <span className="px-1">{valueLabel}</span>
         </div>
     );
