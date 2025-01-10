@@ -1,8 +1,6 @@
 export type RangeData = {
     maxLimit: number;
     minLimit: number;
-    defaultMaxValue: number;
-    defaultMinValue: number;
 };
 
 export const revalidate = 0;
@@ -11,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export async function fetchRangeData(): Promise<RangeData | null> {
     try {
         const response = await fetch(
-            "http://localhost:8080/api/range-values/random",
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/range-values/random`,
             {
                 method: "GET",
                 headers: {
