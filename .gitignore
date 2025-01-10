@@ -31,7 +31,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+# Leave it commented out. For now we don't have secrets :)
+# .env*
 
 # vercel
 .vercel
