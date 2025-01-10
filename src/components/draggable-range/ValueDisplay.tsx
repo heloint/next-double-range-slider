@@ -23,7 +23,7 @@ export default function ValueDisplay({
             .trim();
         setValueDisplayAction(inputValue);
     };
-
+    console.log("==> ", inmutable)
     return (
         <div className="flex justify-center items-center">
             <input

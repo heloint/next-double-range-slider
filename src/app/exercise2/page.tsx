@@ -28,7 +28,7 @@ export default async function Page() {
             <DraggableRange
                 data={rangeData}
                 valueLabel="€"
-                stepValues={rangeArray}
+                rangeValues={rangeArray}
                 editableLabels={false}
             />
         </div>

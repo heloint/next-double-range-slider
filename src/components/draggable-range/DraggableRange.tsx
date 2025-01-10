@@ -13,7 +13,7 @@ export type RangeData = {
 export type DraggableRangeProps = {
     data: RangeData;
     valueLabel: string;
-    stepValues?: number[];
+    rangeValues?: number[];
     editableLabels?: boolean;
 };
 
@@ -35,7 +35,13 @@ export default function DraggableRange(props: DraggableRangeProps) {
         const castedNum = Number(minValueDisplay);
         if (isNaN(castedNum)) return;
         if (castedNum >= maxValue) {
-            setMinValueDisplay(maxValue - stepValue);
+            if (props.rangeValues) {
+                const idx = getNearestIndex(maxValue, props.rangeValues) - 1;
+                const newVal = props.rangeValues[idx];
+                setMinValueDisplay(newVal);
+            } else {
+                setMinValueDisplay(maxValue - stepValue);
+            }
         } else if (castedNum < props.data.minLimit) {
             setMinValueDisplay(props.data.minLimit);
         }
@@ -46,7 +52,13 @@ export default function DraggableRange(props: DraggableRangeProps) {
         const castedNum = Number(maxValueDisplay);
         if (isNaN(castedNum)) return;
         if (castedNum <= minValue) {
-            setMaxValueDisplay(minValue + stepValue);
+            if (props.rangeValues) {
+                const idx = getNearestIndex(minValue, props.rangeValues) + 1;
+                const newVal = props.rangeValues[idx];
+                setMaxValueDisplay(newVal);
+            } else {
+                setMaxValueDisplay(minValue + stepValue);
+            }
         }
         if (castedNum > props.data.maxLimit) {
             setMaxValueDisplay(props.data.maxLimit);
@@ -56,9 +68,16 @@ export default function DraggableRange(props: DraggableRangeProps) {
 
     useEffect(() => {
         if (minValue >= maxValue) {
-            const newMinVal = maxValue - stepValue;
-            setMinValueDisplay(newMinVal);
-            setMinValue(newMinVal);
+            if (props.rangeValues) {
+                const idx = getNearestIndex(maxValue, props.rangeValues) - 1;
+                const newVal = props.rangeValues[idx];
+                setMinValueDisplay(newVal);
+                setMinValue(newVal);
+            } else {
+                const newMinVal = maxValue - stepValue;
+                setMinValueDisplay(newMinVal);
+                setMinValue(newMinVal);
+            }
         } else if (minValue < props.data.minLimit) {
             setMinValueDisplay(props.data.minLimit);
             setMinValue(props.data.minLimit);
@@ -67,9 +86,16 @@ export default function DraggableRange(props: DraggableRangeProps) {
 
     useEffect(() => {
         if (maxValue <= minValue) {
-            const newMaxVal = minValue + stepValue;
-            setMaxValueDisplay(newMaxVal);
-            setMaxValue(newMaxVal);
+            if (props.rangeValues) {
+                const idx = getNearestIndex(minValue, props.rangeValues) + 1;
+                const newVal = props.rangeValues[idx];
+                setMaxValueDisplay(newVal);
+                setMaxValue(newVal);
+            } else {
+                const newMaxVal = minValue + stepValue;
+                setMaxValueDisplay(newMaxVal);
+                setMaxValue(newMaxVal);
+            }
         } else if (maxValue > props.data.maxLimit) {
             setMaxValueDisplay(props.data.maxLimit);
             setMaxValue(props.data.maxLimit);
@@ -79,7 +105,7 @@ export default function DraggableRange(props: DraggableRangeProps) {
     return (
         <div className="w-full flex justify-center items-center gap-1 sm:gap-5">
             <ValueDisplay
-                inmutable={true}
+                inmutable={false}
                 valueLabel={valueLabel}
                 valueDisplay={minValueDisplay}
                 setValueDisplayAction={setMinValueDisplay}
@@ -95,20 +121,33 @@ export default function DraggableRange(props: DraggableRangeProps) {
                     sliderRef={sliderRef}
                     value={minValue}
                     setValueAction={setMinValueDisplay}
+                    rangeValues={props.rangeValues}
                 />
                 <ValueSetterButton
                     maxLimit={props.data.maxLimit}
                     sliderRef={sliderRef}
                     value={maxValue}
                     setValueAction={setMaxValueDisplay}
+                    rangeValues={props.rangeValues}
                 />
             </div>
             <ValueDisplay
-                inmutable={true}
+                inmutable={false}
                 valueLabel={valueLabel}
                 valueDisplay={maxValueDisplay}
                 setValueDisplayAction={setMaxValueDisplay}
             />
         </div>
+    );
+}
+
+function getNearestIndex(value: number, array: number[]): number {
+    return array.reduce(
+        (nearestIndex, currentValue, currentIndex) =>
+            Math.abs(currentValue - value) <
+            Math.abs(array[nearestIndex] - value)
+                ? currentIndex
+                : nearestIndex,
+        0
     );
 }

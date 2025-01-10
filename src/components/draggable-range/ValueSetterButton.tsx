@@ -14,12 +14,14 @@ export default function ValueSetterButton({
     sliderRef,
     value,
     setValueAction,
+    rangeValues,
 }: {
     maxLimit: number;
     colorClass?: string;
     sliderRef: RefObject<HTMLDivElement | null>;
     value: number;
     setValueAction: Dispatch<SetStateAction<string | number>>;
+    rangeValues?: number[];
 }) {
     const thumbRef = useRef<HTMLSpanElement | null>(null);
     const [thumbParent, setThumbParent] = useState<HTMLElement | null>(null);
@@ -39,8 +41,8 @@ export default function ValueSetterButton({
 
         const rect = slider.getBoundingClientRect();
 
-        const scopeLimitTop = rect.top + 5;
-        const scopeLimitBottom = rect.bottom - 5;
+        const scopeLimitTop = rect.top + 7;
+        const scopeLimitBottom = rect.bottom - 7;
         const scopeLimitLeft = rect.left + 2;
         const scopeLimitRight = rect.right + 2;
 
@@ -50,16 +52,17 @@ export default function ValueSetterButton({
             e.clientY < scopeLimitTop ||
             e.clientY > scopeLimitBottom;
 
-            console.log({
-                clientX: e.clientX,
-                scopeLimitLeft,
-            })
         if (isOutOfScope) {
             removeAllHandlers();
         }
 
         const offsetX = e.clientX - rect.left;
-        const newValue = calculateNewScaleValue(maxLimit, offsetX, rect);
+        const newValue = calculateNewScaleValue(
+            maxLimit,
+            offsetX,
+            rect,
+            rangeValues
+        );
         setValueAction(newValue.toFixed(2));
     };
 
@@ -68,7 +71,12 @@ export default function ValueSetterButton({
         if (!slider) return;
         const rect = slider.getBoundingClientRect();
         const offsetX = ev.touches[0].clientX - rect.left;
-        const newValue = calculateNewScaleValue(maxLimit, offsetX, rect);
+        const newValue = calculateNewScaleValue(
+            maxLimit,
+            offsetX,
+            rect,
+            rangeValues
+        );
         setValueAction(newValue.toFixed(2));
     };
 
@@ -104,20 +112,25 @@ export default function ValueSetterButton({
 function calculateNewScaleValue(
     maxLimit: number,
     offsetX: number,
-    rect: DOMRect
+    rect: DOMRect,
+    values?: number[]
 ) {
     const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
-    const newValue = percentage * maxLimit;
-    return newValue;
 
-    // // Ensure offsetX stays between 0 and rect.width
-    // const clampedOffsetX = Math.min(Math.max(offsetX, 0), rect.width);
+    if (!values) {
+        const newValue = percentage * maxLimit;
+        return newValue;
+    }
+    // Interpolate the value within the range of predefined values,
+    // then, snap to the nearest value in the array
+    const interpolatedValue =
+        percentage * (Math.max(...values) - Math.min(...values)) +
+        Math.min(...values);
+    return getNearestValue(interpolatedValue, values);
+}
 
-    // // Calculate percentage based on clamped offsetX and rect.width
-    // const percentage = clampedOffsetX / rect.width;
-
-    // // Scale percentage to maxLimit
-    // const newValue = percentage * maxLimit;
-
-    // return newValue;
+function getNearestValue(value: number, values: number[]): number {
+    return values.reduce((prev, curr) =>
+        Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+    );
 }
