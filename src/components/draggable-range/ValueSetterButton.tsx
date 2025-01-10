@@ -39,12 +39,10 @@ export default function ValueSetterButton({
 
         const rect = slider.getBoundingClientRect();
 
-        const outOfScopeMarginY = 5;
-        const outOfScopeMarginX = 30;
-        const scopeLimitTop = rect.top + outOfScopeMarginY;
-        const scopeLimitBottom = rect.bottom - outOfScopeMarginY;
-        const scopeLimitLeft = rect.left - outOfScopeMarginX;
-        const scopeLimitRight = rect.right + outOfScopeMarginX;
+        const scopeLimitTop = rect.top + 5;
+        const scopeLimitBottom = rect.bottom - 5;
+        const scopeLimitLeft = rect.left + 2;
+        const scopeLimitRight = rect.right + 2;
 
         const isOutOfScope =
             e.clientX < scopeLimitLeft ||
@@ -52,6 +50,10 @@ export default function ValueSetterButton({
             e.clientY < scopeLimitTop ||
             e.clientY > scopeLimitBottom;
 
+            console.log({
+                clientX: e.clientX,
+                scopeLimitLeft,
+            })
         if (isOutOfScope) {
             removeAllHandlers();
         }

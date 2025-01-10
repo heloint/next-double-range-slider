@@ -77,7 +77,7 @@ export default function DraggableRange(props: DraggableRangeProps) {
     }, [maxValue, props.data.maxLimit]);
 
     return (
-        <div className="w-full flex justify-center items-center gap-5">
+        <div className="w-full flex justify-center items-center gap-1 sm:gap-5">
             <ValueDisplay
                 inmutable={true}
                 valueLabel={valueLabel}

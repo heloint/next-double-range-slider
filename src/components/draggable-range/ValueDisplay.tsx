@@ -25,12 +25,12 @@ export default function ValueDisplay({
     };
 
     return (
-        <div>
+        <div className="flex justify-center items-center">
             <input
                 readOnly={inmutable ?? false}
                 disabled={inmutable ?? false}
                 ref={inputRef}
-                className="text-sm text-center font-medium text-gray-700 w-16"
+                className="text-sm text-center font-medium text-gray-700 w-8"
                 type={"text"}
                 maxLength={15}
                 value={valueDisplay}
