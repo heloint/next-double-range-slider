@@ -15,7 +15,7 @@ export type DraggableRangeProps = {
     data: RangeData;
     valueLabel: string;
     rangeValues?: number[];
-    editableLabels?: boolean;
+    inmutableLabels?: boolean;
 };
 
 export default function DraggableRange(props: DraggableRangeProps) {
@@ -102,11 +102,10 @@ export default function DraggableRange(props: DraggableRangeProps) {
             setMaxValue(props.data.maxLimit);
         }
     }, [maxValue, props.data.maxLimit]);
-
     return (
         <div className="w-full flex justify-center items-center gap-1 sm:gap-5">
             <ValueDisplay
-                inmutable={false}
+                inmutable={props.inmutableLabels ?? false}
                 valueLabel={valueLabel}
                 valueDisplay={minValueDisplay}
                 setValueDisplayAction={setMinValueDisplay}
@@ -133,7 +132,7 @@ export default function DraggableRange(props: DraggableRangeProps) {
                 />
             </div>
             <ValueDisplay
-                inmutable={false}
+                inmutable={props.inmutableLabels ?? false}
                 valueLabel={valueLabel}
                 valueDisplay={maxValueDisplay}
                 setValueDisplayAction={setMaxValueDisplay}

@@ -10,7 +10,7 @@ export default async function Page() {
                 Exercise 1 - Normal range use case
             </h1>
             {rangeData ? (
-                <DraggableRange data={rangeData} valueLabel={"€"}/>
+                <DraggableRange data={rangeData} valueLabel={"€"} inmutableLabels={false}/>
             ) : (
                 <div className="py-3 px-5 border-2 border-red-600 rounded">
                     <p className="text-red-500">

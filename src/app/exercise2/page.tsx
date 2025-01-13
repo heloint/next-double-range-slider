@@ -29,7 +29,7 @@ export default async function Page() {
                 data={rangeData}
                 valueLabel="€"
                 rangeValues={rangeArray}
-                editableLabels={false}
+                inmutableLabels={true}
             />
         </div>
     );
